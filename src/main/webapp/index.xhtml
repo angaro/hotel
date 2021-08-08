@@ -1,0 +1,441 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:head>
+        <title>Hotel</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"></link>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script src="sweetalert2/dist/sweetalert2.all.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
+    </h:head>
+    <h:body>
+        <div class ="container" style="margin: 20px"> 
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-warning btn-lg" data-toggle="modal" data-target="#hotel">Hotel</button>
+                <button type="button" class="btn btn-outline-info btn-lg" data-toggle="modal" data-target="#habitacion">Habitacion</button>
+                <button type="button" class="btn btn-outline-danger btn-lg" data-toggle="modal" data-target="#huesped">Huesped</button>
+            </div>
+            <div class="modal fade" id="habitacion" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="habitacionLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="habitacionLabel">Ingresar Información</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <h:form>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="formHotel">Hotel</label>
+                                    <h:selectOneMenu 
+                                        class="form-control" 
+                                        id="formHotel"
+                                        required="true"
+                                        requiredMessage="   Seleccione un hotel"
+                                        value="#{gestionHabitacionView.posHotel}">
+                                        <h:message for ="formHotel" style="color: red"></h:message>
+                                        <f:selectItems value="#{gestionHotelView.listaHoteles}" var="hotel" itemLabel="#{hotel.nombreHotel}" itemValue="#{hotel.posicionH}" ></f:selectItems>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formTipoHabitacion">Tipo Habitación</label>
+                                    <h:selectOneMenu value="#{gestionHabitacionView.habitacionNueva.tipoHabit}"  class="form-control" id="formTipoHabitacion">
+                                        <f:selectItem itemLabel="Simple" itemValue="Simple"/>
+                                        <f:selectItem itemLabel="Doble" itemValue="Doble"/>
+                                        <f:selectItem itemLabel="Suite" itemValue="Suite"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formNumHabit">Número de Habitación</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formNumHabit"
+                                        required="true"
+                                        requiredMessage="ingrese un número de habitación"
+                                        html5:placeholder="ej: 101"
+                                        value="#{gestionHabitacionView.habitacionNueva.numeroHabit}"/>
+                                    <h:message for ="formNumHabit" style="color: red"></h:message>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formBanio">Baño privado</label>
+                                    <h:selectOneMenu value="#{gestionHabitacionView.habitacionNueva.banioHabit}" class="form-control" id="formBanio">
+                                        <f:selectItem itemLabel="Si" itemValue="Si"/>
+                                        <f:selectItem itemLabel="No" itemValue="No"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formTelefono">Telefono</label>
+                                    <h:selectOneMenu value="#{gestionHabitacionView.habitacionNueva.telefonoHabit}" class="form-control" id="formTelefono">
+                                        <f:selectItem itemLabel="Si" itemValue="Si"/>
+                                        <f:selectItem itemLabel="No" itemValue="No"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formCalefaccion">Telefono</label>
+                                    <h:selectOneMenu value="#{gestionHabitacionView.habitacionNueva.calefaccionHabit}" class="form-control" id="formCalefaccion">
+                                        <f:selectItem itemLabel="Si" itemValue="Si"/>
+                                        <f:selectItem itemLabel="No" itemValue="No"/>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <h:commandButton action="#{gestionHabitacionView.adicionarHabitacion()}" class="btn btn-success" value="Guardar"/>
+                                <h:commandButton class="btn btn-danger"  value="Cancelar"/>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="modal fade" id="hotel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="hotelLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="hotelLabel">Ingresar Información</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <h:form>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="formNombreHotel">Nombre</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formNombreHotel"
+                                        required="true"
+                                        requiredMessage="ingrese un nombre de hotel"
+                                        html5:placeholder="ej: San Martin"
+                                        value="#{gestionHotelView.hotelNuevo.nombreHotel}"/>
+                                    <h:message for ="formNombreHotel" style="color: red"></h:message>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="formCiudadHotel">Ciudad</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formCiudadHotel"
+                                        required="true"
+                                        requiredMessage="ingrese una ciudad"
+                                        html5:placeholder="ej: Cali"
+                                        value="#{gestionHotelView.hotelNuevo.ciudadH}"/>
+                                    <h:message for ="formCiudadHotel" style="color: red"></h:message>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="formBarrioHotel">Barrio</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formBarrioHotel"
+                                        required="true"
+                                        requiredMessage="ingrese un Barrio"
+                                        html5:placeholder="ej: Unicentro"
+                                        value="#{gestionHotelView.hotelNuevo.barrioH}"/>
+                                    <h:message for ="formBarrioHotel" style="color: red"></h:message>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="formDireccionHotel">Dirección</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formDireccionHotel"
+                                        required="true"
+                                        requiredMessage="ingrese una dirección"
+                                        html5:placeholder="ej: Calle 45 #127-15"
+                                        value="#{gestionHotelView.hotelNuevo.direccionH}"/>
+                                    <h:message for ="formDireccionHotel" style="color: red"></h:message>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="formTelefonoHotel">Telefono</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formTelefonoHotel"
+                                        required="true"
+                                        requiredMessage="ingrese un teléfono"
+                                        html5:placeholder="ej: 5841254"
+                                        value="#{gestionHotelView.hotelNuevo.telefonoH}"/>
+                                    <h:message for ="formTelefonoHotel" style="color: red"></h:message>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <h:commandButton action="#{gestionHotelView.adicionarHotel()}" class="btn btn-success" value="Guardar"/>
+                                <h:commandButton class="btn btn-danger"  value="Cancelar"/>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="huesped" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="huespedLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="huespedLabel">Ingresar Información</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <h:form>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="formNombreHuesped">Nombre</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formNombreHuesped"
+                                        required="true"
+                                        requiredMessage="ingrese un huesped"
+                                        html5:placeholder="ej: Camilo Torres"
+                                        value="#{gestionHuespedView.huespedNuevo.nombre}"/>
+                                    <h:message for ="formNombreHuesped" style="color: red"></h:message>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formDireccionHuesped">Dirección</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formDireccionHuesped"
+                                        required="true"
+                                        requiredMessage="ingrese una dirección"
+                                        html5:placeholder="ej: Calle 127 #14-52"
+                                        value="#{gestionHuespedView.huespedNuevo.direccion}"/>
+                                    <h:message for ="formDireccionHuesped" style="color: red"></h:message>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formProfesionHuesped">Profesión</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formProfesionHuesped"
+                                        required="true"
+                                        requiredMessage="ingrese una profesión"
+                                        html5:placeholder="ej: Ingeniero de Sistemas"
+                                        value="#{gestionHuespedView.huespedNuevo.profesion}"/>
+                                    <h:message for ="formProfesionHuesped" style="color: red"></h:message>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="formECHuesped">Estado Civil</label>
+                                    <h:selectOneMenu value="#{gestionHuespedView.huespedNuevo.eCivil}" class="form-control" id="formECHuesped">
+                                        <f:selectItem itemLabel="Soltero/a" itemValue="Soltero/a"/>
+                                        <f:selectItem itemLabel="Casado" itemValue="Casado"/>
+                                        <f:selectItem itemLabel="Unión Libre" itemValue="Unión Libre"/>
+                                        <f:selectItem itemLabel="Separado/a" itemValue="Separado/a"/>
+                                        <f:selectItem itemLabel="Divorciado/a" itemValue="Divorciado/a"/>
+                                        <f:selectItem itemLabel="Viudo/a" itemValue="Viudo/a"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="formReservaHuesped">Reserva telefónica</label>
+                                    <h:selectOneMenu value="#{gestionHuespedView.huespedNuevo.reservaTel}" class="form-control" id="formReservaHuesped">
+                                        <f:selectItem itemLabel="Si" itemValue="Si"/>
+                                        <f:selectItem itemLabel="No" itemValue="No"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="formFIHuesped">Fecha Ingreso</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formFIHuesped"
+                                        required="true"
+                                        requiredMessage="ingrese una fecha"
+                                        html5:placeholder="ej: 11/05/2021"
+                                        value="#{gestionHuespedView.huespedNuevo.fechaIngreso}"/>
+                                    <h:message for ="formFIHuesped" style="color: red"></h:message>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formFSHuesped">Fecha Salida</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formFSHuesped"
+                                        required="true"
+                                        requiredMessage="ingrese una fecha"
+                                        html5:placeholder="ej: 15/05/2021"
+                                        value="#{gestionHuespedView.huespedNuevo.fechaSalida}"/>
+                                    <h:message for ="formFSHuesped" style="color: red"></h:message>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formHabitacion">Habitación</label>
+                                    <h:selectOneMenu 
+                                        class="form-control" 
+                                        id="formHabitacion"
+                                        value="#{gestionHabitacionView.posHotel}">
+                                        <f:selectItems value="#{gestionHabitacionView.listaHabitaciones}" var="habitacion" itemLabel="#{habitacion.numeroHabit}" itemValue="#{habitacion.posicionHabit}" ></f:selectItems>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formAlarmaHuesped">Alarma</label>
+                                    <h:inputText
+                                        class="form-control"
+                                        id="formAlarmaHuesped"
+                                        required="true"
+                                        requiredMessage="ingrese una hora"
+                                        html5:placeholder="ej: 05:45am"
+                                        value="#{gestionHuespedView.huespedNuevo.alarma}"/>
+                                    <h:message for ="formAlarmaHuesped" style="color: red"></h:message>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formDesayunoHuesped">Desayuno</label>
+                                    <h:selectOneMenu value="#{gestionHuespedView.huespedNuevo.desayuno}" class="form-control" id="formDesayunoHuesped">
+                                        <f:selectItem itemLabel="Café con leche" itemValue="Café con leche"/>
+                                        <f:selectItem itemLabel="Té con pan" itemValue="Té con pan"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formBebidaHuesped">Bebida preferida</label>
+                                    <h:selectOneMenu value="#{gestionHuespedView.huespedNuevo.bebidaFav}" class="form-control" id="formBebidaHuesped">
+                                        <f:selectItem itemLabel="Gaseosa" itemValue="Gaseosa"/>
+                                        <f:selectItem itemLabel="Agua mineral CON gas" itemValue="Agua mineral CON gas"/>
+                                        <f:selectItem itemLabel="Agua mineral SIN gas" itemValue="Agua mineral SIN gas"/>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <h:commandButton action="#{gestionHuespedView.adicionarHuesped()}" class="btn btn-success" value="Guardar"/>
+                                <h:commandButton class="btn btn-danger"  value="Cancelar"/>
+                            </div>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container" style="margin-top: 30px">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link active" id="v-pills-hoteles-tab" data-toggle="pill" href="#v-pills-hoteles" role="tab" aria-controls="v-pills-hoteles" aria-selected="true">Hoteles</a>
+                            <a class="nav-link" id="v-pills-habitaciones-tab" data-toggle="pill" href="#v-pills-habitaciones" role="tab" aria-controls="v-pills-habitaciones" aria-selected="false">Habitaciones</a>
+                            <a class="nav-link" id="v-pills-huespedes-tab" data-toggle="pill" href="#v-pills-huespedes" role="tab" aria-controls="v-pills-huespedes" aria-selected="false">Huespedes</a>
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-hoteles" role="tabpanel" aria-labelledby="v-pills-hoteles-tab">
+
+                                <table class="table table-striped table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Ciudad</th>
+                                            <th scope="col">Barrio</th>
+                                            <th scope="col">Direccion</th>
+                                            <th scope="col">Teléfono</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <h:form>
+                                            <c:forEach items="#{gestionHotelView.listaHoteles}" var="Hotel" varStatus="pos">
+                                                <tr>
+                                                    <th scope="row">#{pos.index + 1}</th>
+                                                    <td>#{Hotel.nombreHotel}</td>
+                                                    <td>#{Hotel.ciudadH}</td>
+                                                    <td>#{Hotel.barrioH}</td>
+                                                    <td>#{Hotel.direccionH}</td>
+                                                    <td>#{Hotel.telefonoH}</td>
+                                                    <td>
+                                                        <h:commandButton action="#{gestionHotelView.removerHotel(pos.index)}" class="btn btn-danger" value="Eliminar"/>  
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </h:form>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-habitaciones" role="tabpanel" aria-labelledby="v-pills-habitaciones-tab">
+                                <table class="table table-striped table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Tipo habitación</th>
+                                            <th scope="col">Número de habitación</th>
+                                            <th scope="col">Baño privado</th>
+                                            <th scope="col">Teléfono</th>
+                                            <th scope="col">Calefacción</th>
+                                            <th scope="col">Detalle</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <h:form>
+                                            <c:forEach items="#{gestionHabitacionView.listaHabitaciones}" var="habitaciones" varStatus="pos">
+                                                <tr>
+                                                    <th scope="row">#{pos.index + 1}</th>
+                                                    <td>#{habitaciones.tipoHabit}</td>
+                                                    <td>#{habitaciones.numeroHabit}</td>
+                                                    <td>#{habitaciones.banioHabit}</td>
+                                                    <td>#{habitaciones.telefonoHabit}</td>
+                                                    <td>#{habitaciones.calefaccionHabit}</td>
+                                                    <td>#{habitaciones.calefaccionHabit}</td>
+                                                    <td>
+                                                        <h:commandButton action="#{gestionHabitacionView.removerHabitacion(pos.index)}" class="btn btn-danger" value="Eliminar"/>  
+                                                        <td><button type="button" onclick="Swal.fire('#{habitaciones.detalleHabitacion()}')" class="btn btn-primary">Detalle</button>
+                                                        </td>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </h:form>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-huespedes" role="tabpanel" aria-labelledby="v-pills-huespedes-tab">
+                                <table class="table table-striped table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Direccion</th>
+                                            <th scope="col">Profesión</th>
+                                            <th scope="col">Estado Civil</th>
+                                            <th scope="col">Reserva Tel</th>
+                                            <th scope="col">Fecha ingreso</th>
+                                            <th scope="col">Fecha salida</th>
+                                            <th scope="col">Acciones</th>
+                                             <th scope="col">Seleccion Huesped</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <h:form>
+                                            <c:forEach items="#{gestionHuespedView.listaHuespedes}" var="huespedes" varStatus="pos">
+                                                <tr>
+                                                    <th scope="row">#{pos.index + 1}</th>
+                                                    <td>#{huespedes.nombre}</td>
+                                                    <td>#{huespedes.direccion}</td>
+                                                    <td>#{huespedes.profesion}</td>
+                                                    <td>#{huespedes.geteCivil()}</td>
+                                                    <td>#{huespedes.reservaTel}</td>
+                                                    <td>#{huespedes.fechaIngreso}</td>
+                                                    <td>#{huespedes.fechaSalida}</td>
+                                                    <td>
+                                                        <h:commandButton action="#{gestionHuespedView.removerHuesped(pos.index)}" class="btn btn-danger" value="Eliminar"/> 
+                                                        <td><button style="margin-top: 2px" type="button" onclick="Swal.fire('#{huespedes.alarmaSeleccionada()}')" class="btn btn-primary">Alarma</button>
+                                                            <button style="margin-top: 2px" type="button" onclick="Swal.fire('#{huespedes.desayunoSeleccionado()}')" class="btn btn-primary">Desayuno</button>
+                                                            <button style="margin-top: 2px" type="button" onclick="Swal.fire('#{huespedes.bebidaSeleccionada()}')" class="btn btn-primary">Bebida</button>
+                                                        </td>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </h:form>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+
+        </div>
+    </h:body>
+</html>
